@@ -1,3 +1,4 @@
+##JDelgado inital commit. No functionaly yet done.
 ## Put comments here that give an overall description of what your
 ## functions do
 

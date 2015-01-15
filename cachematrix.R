@@ -26,9 +26,8 @@ makeCacheMatrix <- function(x = matrix()) {
   if (nrow(x) != ncol(x))
     stop("Not a square matix...")
 
-  
+  set(x)
   set <- function(y){
-    print(y)
     if(!is.matrix(y)) 
       stop("Not a matix...")
       
@@ -57,12 +56,24 @@ print.makeCacheMatrix <- function(x){
 ## Otherwise calculates it and save into the cache.
 
 cacheSolve <- function(x, ...) {
-  i <- X$getInverse()
-  if(!is.null(i)){}
+  print(x)
+  i <- x$getInverse()
+  if(!is.null(i)){
     message("getting cached matrix")
+    return(i)
 }
  data <-x$get() 
- i <- solve(x)
- x$setInvernse(data)
+ i <- solve( data )
+ x$setInverse(i)
  i
 }
+
+##Test cases
+m1<-makeCacheMatrix( matrix(c(3,2,-1,2,-2,4,-1,0.5,-1), c(3,3)))
+cacheSolve( m1 )
+cacheSolve( m1 )
+
+m2<-makeCacheMatrix( matrix(c(3,2,2,-2), c(2,2)))
+cacheSolve( m2 )
+
+

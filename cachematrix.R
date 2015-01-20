@@ -9,25 +9,15 @@
 ## macheCacheMatrix. Sets, gets matrix. Sets, gets inverse matrix 
 
 makeCacheMatrix <- function(x = matrix()) {
-  
-  i<-NULL
-  
-  mcm<-list(set = set, 
-             get = get, 
-             setInverse = setInverse, 
-             getInverse = getInverse)
+ 
   
   if(missing(x))
     stop("requires a matrix parameter...")
-  
-  if(!is.matrix(x)) 
-    stop("Not a matix")
+  i<-NULL
 
-  if (nrow(x) != ncol(x))
-    stop("Not a square matix...")
 
-  set(x)
   set <- function(y){
+ 
     if(!is.matrix(y)) 
       stop("Not a matix...")
       
@@ -42,21 +32,26 @@ makeCacheMatrix <- function(x = matrix()) {
   getInverse <- function() i
   getenv<- function() enviroment()
   
- # mcm <- list2env(mcm)
+  mcm<-list(set = set, 
+            get = get, 
+            setInverse = setInverse, 
+            getInverse = getInverse)
+  set(x)
+
   class(mcm) <-"makeCacheMatrix"
   return(mcm)
 
 }
 print.makeCacheMatrix <- function(x){
   if(class(x)!="makeCacheMatrix") stop("Invalid type object...");
-  c( c("Matrix: ",x$get()))
+   x$get()
 }
 
 ## If found, retrives an matrix inverse from the cache.
 ## Otherwise calculates it and save into the cache.
 
 cacheSolve <- function(x, ...) {
-  print(x)
+ # print(x)
   i <- x$getInverse()
   if(!is.null(i)){
     message("getting cached matrix")
@@ -70,10 +65,19 @@ cacheSolve <- function(x, ...) {
 
 ##Test cases
 m1<-makeCacheMatrix( matrix(c(3,2,-1,2,-2,4,-1,0.5,-1), c(3,3)))
+##Caching & retrieveing
 cacheSolve( m1 )
 cacheSolve( m1 )
 
 m2<-makeCacheMatrix( matrix(c(3,2,2,-2), c(2,2)))
+##Caching & retrieveing
+cacheSolve( m2 )
 cacheSolve( m2 )
 
+## Not square matrix test
+m2<-makeCacheMatrix( matrix(c(3,2,2,-2,4,4), c(3,2)))
+## Not matrix object parameter
+m2<-makeCacheMatrix( list(c(3,2,2,-2,4,4), c(3,2)))
 
+## Missed parameter
+m2<-makeCacheMatrix( )
